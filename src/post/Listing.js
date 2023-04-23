@@ -4,43 +4,52 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEdit } from '@fortawesome/free-solid-svg-icons';
 import axios from 'axios';
 import Image from './Image';
-import Pagination from '../Pagination';
+import Loader from '../Common/Loader';
+
 
 const Listing = () => {
-    const [posts, setPosts] = useState({});
+    const [posts, setPosts] = useState({
+        data: [],
+        currentPage: 0,
+        totalRecord: 0
+    });
 
-    const pageSize = 5;
-    let [currentPage, setCurrentPage] = useState(1);
+    const [currentPage,setCurrentPage] = useState(0);
+    const [isLoading,setisLoading] = useState(true);
 
+    const pageSize = 10;
     const getPosts = async () => {
-        const data = await axios.get(`https://dummyapi.io/data/v1/post?limit=${pageSize}`, {
+        let url = `https://dummyapi.io/data/v1/post?limit=${pageSize}&page=${currentPage}`;
+
+        const data = await axios.get(url, {
             headers: {
                 'app-id': '6443d69d2287bfbec0e6ed81'
             }
         }).then((response) => {
-            let postsData = response.data;
-            setPosts(postsData);
-            console.log('posts', posts);
-
+            setPosts({
+                data: response.data.data,
+                currentPage: response.data.page,
+                totalRecord: response.data.total
+            });
+            setisLoading(false);
         }).catch((error) => {
             console.log(error);
         })
     };
 
-    
-    const data = useMemo(() => {
-        getPosts();
-    }, [currentPage,setPosts]);
-
-
+  
     useEffect(() => {
-        setTimeout(() => {
-            getPosts();
-        }, 2000)
-    }, [setPosts]);
+        getPosts();
+
+    }, [setPosts,currentPage]);
 
     return (
         <>
+            <div>Total Record: {posts.totalRecord ? posts.totalRecord : 0}</div>
+            <div>Current Page: {currentPage ? currentPage : 0}</div>
+            {currentPage > 0 ?  <button onClick={()=> { setisLoading(true);  setCurrentPage(posts.currentPage-1)}}>Prev</button> : ''}
+            <button onClick={()=> { setisLoading(true); setCurrentPage(posts.currentPage+1)}}>Next</button>
+            {isLoading ? <Loader/> : '' }
             <ReactBootstrap.Table striped bordered responsive>
                 <thead className="thead-dark">
                     <tr>
@@ -56,7 +65,7 @@ const Listing = () => {
                 </thead>
                 <tbody>
                     {
-                        posts.data && posts.data.map((element, id) => {
+                        posts && posts.data && posts.data.map((element, id) => {
                             return (
                                 <tr key={id}>
                                     <td>{id + 1}</td>
@@ -71,7 +80,7 @@ const Listing = () => {
                                         {`${element.owner.title} ${element.owner.firstName} ${element.owner.lastName}`}
                                     </td>
                                     <td>
-                                        <a href=""><FontAwesomeIcon icon={faEdit} /></a>
+                                        <a><FontAwesomeIcon icon={faEdit} /></a>
                                     </td>
                                 </tr>
                             )
@@ -79,13 +88,6 @@ const Listing = () => {
                     }
                 </tbody>
             </ReactBootstrap.Table>
-            <Pagination
-                className="pagination-bar"
-                currentPage={currentPage}
-                totalCount={posts.data.tototal}
-                pageSize={pageSize}
-                onPageChange={page => setCurrentPage(page)}
-            />
         </>
     );
 };

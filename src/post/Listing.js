@@ -46,14 +46,14 @@ const Listing = () => {
     return (
         <>
             <div>Total Record: {posts.totalRecord ? posts.totalRecord : 0}</div>
-            <div>Current Page: {currentPage ? currentPage : 0}</div>
-            {currentPage > 0 ?  <button onClick={()=> { setisLoading(true);  setCurrentPage(posts.currentPage-1)}}>Prev</button> : ''}
-            <button onClick={()=> { setisLoading(true); setCurrentPage(posts.currentPage+1)}}>Next</button>
+            <div>Current Page: {currentPage ? currentPage+1 : 1}</div>
+            {currentPage > 0 ?  <button onClick={()=> { setisLoading(true);  setCurrentPage(currentPage-1)}}>Prev</button> : ''}
+            <button onClick={()=> { setisLoading(true); setCurrentPage(currentPage+1)}}>Next</button>
             {isLoading ? <Loader/> : '' }
             <ReactBootstrap.Table striped bordered responsive>
                 <thead className="thead-dark">
                     <tr>
-                        <th>sr No</th>
+                        <th>Sr No</th>
                         <th>Image</th>
                         <th>Like</th>
                         <th>Tags</th>
@@ -68,7 +68,7 @@ const Listing = () => {
                         posts && posts.data && posts.data.map((element, id) => {
                             return (
                                 <tr key={id}>
-                                    <td>{id + 1}</td>
+                                    <td>{currentPage ==0 ? (pageSize*(currentPage))+(id + 1) : (pageSize*(currentPage))+(id + 1)}</td>
                                     <td><Image srcUrl={element.image} /></td>
                                     <td>{element.likes}</td>
                                     <td>{element.tags[0]}</td>

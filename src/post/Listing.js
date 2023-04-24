@@ -18,30 +18,28 @@ const Listing = () => {
     const [isLoading,setisLoading] = useState(true);
 
     const pageSize = 10;
-    const getPosts = async () => {
-        let url = `https://dummyapi.io/data/v1/post?limit=${pageSize}&page=${currentPage}`;
-
-        const data = await axios.get(url, {
-            headers: {
-                'app-id': '6443d69d2287bfbec0e6ed81'
-            }
-        }).then((response) => {
-            setPosts({
-                data: response.data.data,
-                currentPage: response.data.page,
-                totalRecord: response.data.total
-            });
-            setisLoading(false);
-        }).catch((error) => {
-            console.log(error);
-        })
-    };
-
   
     useEffect(() => {
+        const getPosts = async () => {
+            let url = `https://dummyapi.io/data/v1/post?limit=${pageSize}&page=${currentPage}`;
+    
+            await axios.get(url, {
+                headers: {
+                    'app-id': '6443d69d2287bfbec0e6ed81'
+                }
+            }).then((response) => {
+                setPosts({
+                    data: response.data.data,
+                    currentPage: response.data.page,
+                    totalRecord: response.data.total
+                });
+                setisLoading(false);
+            }).catch((error) => {
+                console.log(error);
+            })
+        };
         getPosts();
-
-    }, [setPosts,currentPage]);
+    }, [currentPage]);
 
     return (
         <>
@@ -68,7 +66,7 @@ const Listing = () => {
                         posts && posts.data && posts.data.map((element, id) => {
                             return (
                                 <tr key={id}>
-                                    <td>{currentPage ==0 ? (pageSize*(currentPage))+(id + 1) : (pageSize*(currentPage))+(id + 1)}</td>
+                                    <td>{currentPage === 0 ? (pageSize*(currentPage))+(id + 1) : (pageSize*(currentPage))+(id + 1)}</td>
                                     <td><Image srcUrl={element.image} /></td>
                                     <td>{element.likes}</td>
                                     <td>{element.tags[0]}</td>
@@ -80,7 +78,7 @@ const Listing = () => {
                                         {`${element.owner.title} ${element.owner.firstName} ${element.owner.lastName}`}
                                     </td>
                                     <td>
-                                        <a><FontAwesomeIcon icon={faEdit} /></a>
+                                        <a href="#j"><FontAwesomeIcon icon={faEdit} /></a>
                                     </td>
                                 </tr>
                             )

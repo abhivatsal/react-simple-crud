@@ -1,6 +1,23 @@
+import { useState } from 'react';
 import Modal from 'react-bootstrap/Modal';
 
 const CreateModal = ({ modalShow, setModalShow }) => {
+
+   const initial = {
+      text: '',
+      image: '',
+      likes: '',
+      tags: ''
+   };
+
+   const [formData, setFormData] = useState(initial);
+
+   const submitForm = (e) => {
+      e.preventDefault();
+      console.log(formData);
+      setFormData(initial);
+   }
+
    return (
       <>
          <Modal
@@ -15,26 +32,32 @@ const CreateModal = ({ modalShow, setModalShow }) => {
                </Modal.Title>
             </Modal.Header>
             <Modal.Body>
-               <form>
-                  <div class="form-row">
-                     <div class="form-group col-md-6">
-                        <label for="post-text">Text</label>
-                        <input type="Text" class="form-control" id="post-text" placeholder="post Description"/>
-                     </div>
-                     <div class="form-group col-md-6">
-                        <label for="post-image">Image</label>
-                        <input type="text" class="form-control" id="post-image" placeholder="Enter Post Image Url"/>
+               <form onSubmit={submitForm}>
+                  <div className="form-row row mb-3">
+                     <label className="col-sm-2 col-form-label">Text</label>
+                     <div className="col-sm-10">
+                        <input type="Text" value={formData.text} onChange={(e) => setFormData({ ...formData, text: e.target.value })} className="form-control" name="description" id="post-text" placeholder="post Description" />
                      </div>
                   </div>
-                  <div class="form-group">
-                     <label for="post-likes">likes</label>
-                     <input type="text" class="form-control" id="post-likes" placeholder="Enter No of Likes"/>
+                  <div className="form-group row mb-3">
+                     <label className="col-sm-2 col-form-label" >Image</label>
+                     <div className="col-sm-10">
+                        <input type="text" value={formData.image} onChange={(e) => setFormData({ ...formData, image: e.target.value })} className="form-control" name="image_url" id="post-image" placeholder="Enter Post Image Url" />
+                     </div>
                   </div>
-                  <div class="form-group">
-                     <label for="post-tags">Tags</label>
-                     <input type="text" class="form-control" id="post-tags" placeholder="Apartment, studio, or floor"/>
+                  <div className="form-group row mb-3">
+                     <label className="col-sm-2 col-form-label" >likes</label>
+                     <div className="col-sm-10">
+                        <input type="text" value={formData.likes} onChange={(e) => setFormData({ ...formData, likes: e.target.value })} className="form-control" name="post_likes" id="post-likes" placeholder="Enter No of Likes" />
+                     </div>
                   </div>
-                  <button type="submit" class="btn btn-primary">Create Post</button>
+                  <div className="form-group row mb-3">
+                     <label className="col-sm-2 col-form-label">Tags</label>
+                     <div className="col-sm-10">
+                        <input type="text" value={formData.tags} onChange={(e) => setFormData({ ...formData, tags: e.target.value })} className="form-control" name="tags" id="post-tags" placeholder="Tags" />
+                     </div>
+                  </div>
+                  <button type="submit" className="btn btn-primary">Create Post</button>
                </form>
             </Modal.Body>
          </Modal>

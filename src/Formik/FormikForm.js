@@ -3,7 +3,7 @@ import { useFormik } from 'formik';
 import CommonModal from '../Common/CommonModal';
 
 
-const FormikForm = ({ modalShow, setModalShow }) => {
+const FormikForm = () => {
     const formik = useFormik({
         initialValues: {
             firstName: '',
@@ -59,7 +59,7 @@ const FormikForm = ({ modalShow, setModalShow }) => {
         <button className="btn btn-primary" type="submit">Submit</button>
     </form>;
     return (
-        <CommonModal modalShow={modalShow} setModalShow={setModalShow} title="Add Post" content={body} />
+        <CommonModal title="Add User" content={body} />
     );
 };
 

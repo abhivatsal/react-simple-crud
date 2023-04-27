@@ -4,7 +4,14 @@ import Post from './post';
 function App() {
   return (
     <div className="App">
-       <Post/>
+      <div className="row">
+          <div className='col-6'>
+                   <Post/>
+          </div>
+          <div className='col-6'>
+
+          </div>
+      </div>
     </div>
   );
 }

@@ -14,7 +14,7 @@ const CreateModal = ({ modalShow, setModalShow }) => {
 
    const submitForm = (e) => {
       e.preventDefault();
-      console.log(formData);
+      alert(JSON.stringify(formData, null, 2));
       setFormData(initial);
    }
 
